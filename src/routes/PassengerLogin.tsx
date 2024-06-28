@@ -77,8 +77,8 @@ const PassengerLogin = () => {
                                 setPassengerLogin(passengers[0]);
                             }}
                             className='p-2 rounded shadow w-full'
-                            name='status'
-                            aria-label='Project status'
+                            name='passenger'
+                            aria-label='Passenger'
                         >
                             {passengers.map((passenger) => (
                                 <option

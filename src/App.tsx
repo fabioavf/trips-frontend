@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { UserContext } from './services/userContext';
 import { Driver } from './interface/Driver';
 import DriverLogin from './routes/DriverLogin';
+import NewTrip from './routes/NewTrip';
 
 const router = createBrowserRouter([
     {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
     {
         path: '/driver/login',
         element: <DriverLogin />,
+    },
+    {
+        path: '/new-trip',
+        element: <NewTrip />,
     },
 ]);
 
