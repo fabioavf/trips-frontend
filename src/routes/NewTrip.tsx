@@ -63,7 +63,7 @@ const NewTrip = () => {
             >
                 <ChevronLeftIcon className='size-6 stroke-2 | text-white' />
             </button>
-            <div className='flex flex-col justify-center gap-4 | w-full p-4 | bg-white | rounded shadow'>
+            <div className='flex flex-col justify-center gap-4 | w-full max-w-3xl p-4 | bg-white | rounded shadow'>
                 <div className='flex flex-col gap-4 | w-full px-4 py-8 | bg-slate-100 rounded shadow'>
                     <Fieldset className='space-y-8'>
                         <Legend className='text-lg font-bold'>Criar um novo trajeto</Legend>

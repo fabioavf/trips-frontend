@@ -44,22 +44,22 @@ const RootPassenger = () => {
 
     return (
         <main className='flex justify-center items-center | min-h-screen w-full p-3 | bg-blue-200'>
-            <div className='flex flex-col justify-center gap-4 | w-full p-4 | bg-white | rounded shadow'>
+            <div className='flex flex-col justify-center gap-4 | w-full max-w-3xl p-4 | bg-white | rounded shadow'>
                 <h1 className='text-lg font-bold'>Olá, {userContext.user.name}.</h1>
 
-                {populatedTrips.length &&
+                {populatedTrips.length > 0 ? (
                     populatedTrips.map((trip) => (
                         <div
                             key={trip._id}
                             className='flex flex-col gap-4 | w-full px-4 py-8 | bg-slate-100 rounded shadow'
                         >
-                            <p>
+                            <div>
                                 {trip.concluded ? (
-                                    <p className='font-bold text-lg text-green-600'>Concluída</p>
+                                    <p className='font-bold text-lg text-green-600'>Concluído</p>
                                 ) : (
                                     <p className='font-bold text-lg text-yellow-600'>Em andamento</p>
                                 )}
-                            </p>
+                            </div>
                             <div className='flex justify-between gap-4'>
                                 <div className='flex flex-col justify-between'>
                                     <div>
@@ -88,7 +88,12 @@ const RootPassenger = () => {
                                 </div>
                             </div>
                         </div>
-                    ))}
+                    ))
+                ) : (
+                    <div>
+                        <p>Você não tem nenhum trajeto em andamento ou concluído.</p>
+                    </div>
+                )}
                 <button
                     onClick={() => navigate('/new-trip')}
                     className='px-4 py-2 w-full | font-semibold | bg-blue-600 text-white | rounded shadow | hover:bg-blue-700 active:bg-blue-700 transition-all'

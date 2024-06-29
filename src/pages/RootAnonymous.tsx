@@ -14,7 +14,7 @@ const RootAnonymous = () => {
     };
     return (
         <main className='flex justify-center items-center | min-h-screen w-full p-3 | bg-blue-200'>
-            <div className='flex flex-col justify-center gap-4 | w-full p-4 | bg-white | rounded shadow'>
+            <div className='flex flex-col justify-center gap-4 | w-full max-w-3xl p-4 | bg-white | rounded shadow'>
                 <div className='flex flex-col items-center gap-4 | w-full px-4 py-8 | bg-slate-100 rounded shadow'>
                     <UserGroupIcon className='size-8' />
                     <button
