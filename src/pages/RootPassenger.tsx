@@ -2,10 +2,11 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../services/userContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { Trip } from '../interface/Trip';
+import { PopulatedTrip, Trip } from '../interface/Trip';
 
 const RootPassenger = () => {
     const [trips, setTrips] = useState<Trip[]>([]);
+    const [populatedTrips, setPopulatedTrips] = useState<PopulatedTrip[]>([]);
 
     const userContext = useContext(UserContext);
     const navigate = useNavigate();
@@ -26,16 +27,19 @@ const RootPassenger = () => {
 
     useEffect(() => {
         const updatedTrips = trips.map(async (trip) => {
-            const driver = await getDriver(trip.driver);
-            const passenger = await getPassenger(trip.passenger);
-            const car = await getCar(driver.car);
+            let driver, passenger, car;
 
-            return { ...trip, driver: { ...driver, car: car }, passenger };
+            if (typeof trip.driver === 'string') driver = await getDriver(trip.driver);
+            if (typeof trip.passenger === 'string') passenger = await getPassenger(trip.passenger);
+            if (typeof driver === 'object') car = await getCar(driver.car);
+
+            if (driver && passenger && car) return { ...trip, driver: { ...driver, car: car }, passenger };
+            else return trip;
         });
 
-        Promise.all(updatedTrips).then((response) => console.log(response));
+        Promise.all(updatedTrips).then((response) => setPopulatedTrips(response));
 
-        // Promise.all(updatedTrips).then((response) => setTrips(response));
+        console.log(populatedTrips);
     }, [trips]);
 
     return (
@@ -43,13 +47,46 @@ const RootPassenger = () => {
             <div className='flex flex-col justify-center gap-4 | w-full p-4 | bg-white | rounded shadow'>
                 <h1 className='text-lg font-bold'>Olá, {userContext.user.name}.</h1>
 
-                {trips.length &&
-                    trips.map((trip) => (
+                {populatedTrips.length &&
+                    populatedTrips.map((trip) => (
                         <div
                             key={trip._id}
                             className='flex flex-col gap-4 | w-full px-4 py-8 | bg-slate-100 rounded shadow'
                         >
-                            <p>{trip.driver}</p>
+                            <p>
+                                {trip.concluded ? (
+                                    <p className='font-bold text-lg text-green-600'>Concluída</p>
+                                ) : (
+                                    <p className='font-bold text-lg text-yellow-600'>Em andamento</p>
+                                )}
+                            </p>
+                            <div className='flex justify-between gap-4'>
+                                <div className='flex flex-col justify-between'>
+                                    <div>
+                                        <p className='text-xs'>
+                                            de <span className='font-semibold'>{trip.origin}</span> para
+                                        </p>
+                                        <h3 className='text-lg font-bold'>{trip.destination}</h3>
+                                    </div>
+                                    <p className='text-xs'>
+                                        {trip.time
+                                            .toLocaleString('pt-BR')
+                                            .split('T')[0]
+                                            .split('-')
+                                            .reverse()
+                                            .map((number, index) => (index === 2 ? number : number + '/'))}
+                                    </p>
+                                </div>
+                                <div className='flex flex-col items-end'>
+                                    <p className='text-xs'>Motorista</p>
+                                    <h3 className='text-lg font-bold'>
+                                        {trip.driver.name} {trip.driver.surname}
+                                    </h3>
+                                    <p>
+                                        {trip.driver.car.make} {trip.driver.car.model} - {trip.driver.car.licensePlate}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 <button
